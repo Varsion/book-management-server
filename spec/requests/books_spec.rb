@@ -27,7 +27,6 @@ RSpec.describe "Books", type: :request do
   describe "GET /books" do
     it "success" do
       get "/books", headers: basic_headers
-      debugger
       result = JSON.parse(response.body)
       expect(response.status).to eq(200)
       expect(result.size).to eq(1)
