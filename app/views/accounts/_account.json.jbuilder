@@ -1,1 +1,1 @@
-json.extract! account, :name, :amount, :frozen_amount
+json.extract! account, :id, :name, :amount, :frozen_amount
