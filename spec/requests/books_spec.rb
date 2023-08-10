@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.describe "Books", type: :request do
   before(:each) do
     @book = create(:book)
+    @book_borrowing = create(:book, status: :borrowing)
   end
 
   describe "GET /books/:id" do
@@ -27,8 +28,15 @@ RSpec.describe "Books", type: :request do
       get "/books", headers: basic_headers
       result = JSON.parse(response.body)
       expect(response.status).to eq(200)
+      expect(result.size).to eq(2)
+    end
+
+    it "success, filter by status" do
+      get "/books", params: { status: "borrowing" }, headers: basic_headers
+      result = JSON.parse(response.body)
+      expect(response.status).to eq(200)
       expect(result.size).to eq(1)
-      expect(result[0]["id"]).to eq(@book.id)
+      expect(result[0]["id"]).to eq(@book_borrowing.id)
     end
   end
 
