@@ -1,0 +1,316 @@
+{
+	"info": {
+		"_postman_id": "1d7afec0-8295-40e0-b725-1976aa517133",
+		"name": "Book Management Server",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10251815"
+	},
+	"item": [
+		{
+			"name": "Accounts",
+			"item": [
+				{
+					"name": "Create Account",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"jianhua\",\n    \"amount\": 1000\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{SERVER_HOST}}/accounts",
+							"host": [
+								"{{SERVER_HOST}}"
+							],
+							"path": [
+								"accounts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Account",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{SERVER_HOST}}/accounts/:id",
+							"host": [
+								"{{SERVER_HOST}}"
+							],
+							"path": [
+								"accounts",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Borrow Statistics",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{SERVER_HOST}}/accounts/:account_id/borrow_statistics?type=monthly",
+							"host": [
+								"{{SERVER_HOST}}"
+							],
+							"path": [
+								"accounts",
+								":account_id",
+								"borrow_statistics"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "monthly",
+									"description": "monthly / yearly, yearly is default"
+								},
+								{
+									"key": "includes[]",
+									"value": "Book",
+									"description": "Whether to return the borrowed books or the details of the borrowing records, the default is not returned",
+									"disabled": true
+								},
+								{
+									"key": "includes[]",
+									"value": "Transaction",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "account_id",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Books",
+			"item": [
+				{
+					"name": "Get All Books",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{SERVER_HOST}}/books",
+							"host": [
+								"{{SERVER_HOST}}"
+							],
+							"path": [
+								"books"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Book",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{SERVER_HOST}}/books/:id",
+							"host": [
+								"{{SERVER_HOST}}"
+							],
+							"path": [
+								"books",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Book's Actual Income",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{SERVER_HOST}}/books/:id/actual_income?start_time=\"2023-08-01 10:37:08 UTC\"&end_time=\"2023-08-15 10:37:08 UTC\"",
+							"host": [
+								"{{SERVER_HOST}}"
+							],
+							"path": [
+								"books",
+								":id",
+								"actual_income"
+							],
+							"query": [
+								{
+									"key": "start_time",
+									"value": "\"2023-08-01 10:37:08 UTC\""
+								},
+								{
+									"key": "end_time",
+									"value": "\"2023-08-15 10:37:08 UTC\""
+								},
+								{
+									"key": "includes[]",
+									"value": "Transaction",
+									"description": "if need return Transaction records",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Transactions",
+			"item": [
+				{
+					"name": "Create Transaction",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"account_id\": 3,\n    \"book_id\": 1,\n    \"includes\": [\n        \"Account\",\n        \"Book\"\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{SERVER_HOST}}/transactions",
+							"host": [
+								"{{SERVER_HOST}}"
+							],
+							"path": [
+								"transactions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Transaction Info",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{SERVER_HOST}}/transactions/:id",
+							"host": [
+								"{{SERVER_HOST}}"
+							],
+							"path": [
+								"transactions",
+								":id"
+							],
+							"query": [
+								{
+									"key": "includes[]",
+									"value": "Account",
+									"disabled": true
+								},
+								{
+									"key": "includes[]",
+									"value": "Book",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Due Transaction(Return Borrowing)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"account_id\": 3,\n    \"book_id\": 1,\n    \"includes\": [\n        \"Account\",\n        \"Book\"\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{SERVER_HOST}}/transactions/due",
+							"host": [
+								"{{SERVER_HOST}}"
+							],
+							"path": [
+								"transactions",
+								"due"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "SERVER_HOST",
+			"value": "https://book-management-server-8lqn.onrender.com",
+			"type": "string"
+		}
+	]
+}
