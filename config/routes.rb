@@ -5,7 +5,11 @@ Rails.application.routes.draw do
   # root "articles#index"
 
   resources :accounts, only: [:create, :show]
-  resources :books, only: [:index, :show]
+  resources :books, only: [:index, :show] do
+    member do
+      get :actual_income
+    end
+  end
   resources :transactions, only: [:create, :show] do
     collection do
       post :due

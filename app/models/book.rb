@@ -5,4 +5,6 @@ class Book < ApplicationRecord
   }
 
   has_many :transactions
+
+  has_many :due_transactions, -> { where(status: :returned) }, class_name: "Transaction", foreign_key: :book_id
 end

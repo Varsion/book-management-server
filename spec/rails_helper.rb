@@ -42,6 +42,7 @@ RSpec.configure do |config|
   # about factory_bot
   config.include FactoryBot::Syntax::Methods
   config.before(:suite) { FactoryBot.find_definitions }
+  config.before(:each) { Timecop.return }
 
   # You can uncomment this line to turn off ActiveRecord support entirely.
   config.use_active_record = false

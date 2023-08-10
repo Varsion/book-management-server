@@ -31,4 +31,79 @@ RSpec.describe "Books", type: :request do
       expect(result[0]["id"]).to eq(@book.id)
     end
   end
+
+  describe "GET /books/:id/actual_income" do
+    before(:each) do
+      @account = create(:account, amount: 1000)
+      Timecop.travel(Time.current - 7.days) do
+        @transaction_1 = build_transaction(@book, @account)
+      end
+      Timecop.travel(Time.current - 3.days) do
+        @transaction_2 = build_transaction(@book, @account)
+      end
+      # no due
+      @transaction_3 = create_transaction(@book, @account)
+    end
+
+    it "get income without date filter" do
+      get "/books/#{@book.id}/actual_income", headers: basic_headers
+      expect(response.status).to eq(200)
+      expect(response.body).to include_json({
+        income: (@book.price * 2).to_s,
+      })
+    end
+
+    it "get income without date filter, with transactions" do
+      get "/books/#{@book.id}/actual_income",
+        params: {
+          includes: ["Transaction"],
+        }, headers: basic_headers
+
+      expect(response.status).to eq(200)
+      result = JSON.parse(response.body)
+      expect(result["transactions"].pluck("id")).to match_array([@transaction_1.id, @transaction_2.id])
+    end
+
+    it "get income with date filter" do
+      get "/books/#{@book.id}/actual_income",
+        params: {
+          start_time: Time.current - 10.days,
+          end_time: Time.current - 5.days,
+          includes: ["Transaction"],
+        }, headers: basic_headers
+      expect(response.status).to eq(200)
+      result = JSON.parse(response.body)
+      expect(result["income"]).to eq((@book.price * 1).to_s)
+      expect(result["transactions"].pluck("id")).to eq([@transaction_1.id])
+    end
+  end
+
+  def create_transaction(book, account)
+    account.update(
+      amount: account.amount - book.price,
+      frozen_amount: account.frozen_amount + book.price,
+    )
+    book.update(status: :borrowing)
+    create(:transaction, account: account, book: book)
+  end
+
+  def due_transaction(transaction)
+    # auto due after 1 day
+    Timecop.travel(Time.current + 1.days) do
+      transaction.account.update!(
+        frozen_amount: transaction.account.frozen_amount - transaction.cost,
+      )
+      transaction.book.update!(status: :idle)
+      transaction.update!(
+        status: :returned,
+        return_date: Time.current,
+      )
+    end
+  end
+
+  def build_transaction(book, account)
+    tran = create_transaction(book, account)
+    due_transaction(tran)
+    tran
+  end
 end
