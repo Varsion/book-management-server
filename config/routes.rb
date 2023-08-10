@@ -6,4 +6,9 @@ Rails.application.routes.draw do
 
   resources :accounts, only: [:create, :show]
   resources :books, only: [:index, :show]
+  resources :transactions, only: [:create, :show] do
+    collection do
+      post :due
+    end
+  end
 end
