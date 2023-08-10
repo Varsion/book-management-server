@@ -18,9 +18,7 @@ RSpec.describe "Books", type: :request do
 
     it "no exist book" do
       get "/books/999", headers: basic_headers
-      result = JSON.parse(response.body)
-      expect(response.status).to eq(200)
-      expect(result.blank?).to be(true)
+      expect(response.status).to eq(404)
     end
   end
 

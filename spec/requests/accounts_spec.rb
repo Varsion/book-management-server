@@ -31,9 +31,7 @@ RSpec.describe "Accounts", type: :request do
 
     it "no exist account" do
       get "/accounts/999", headers: basic_headers
-      result = JSON.parse(response.body)
-      expect(response.status).to eq(200)
-      expect(result.blank?).to be(true)
+      expect(response.status).to eq(404)
     end
   end
 end
