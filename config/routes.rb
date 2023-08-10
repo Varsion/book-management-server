@@ -4,7 +4,12 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "articles#index"
 
-  resources :accounts, only: [:create, :show]
+  resources :accounts, only: [:create, :show] do
+    member do
+      get :borrow_statistics
+    end
+  end
+
   resources :books, only: [:index, :show] do
     member do
       get :actual_income
