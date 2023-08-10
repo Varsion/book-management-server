@@ -1,8 +1,12 @@
 class AccountsController < ApplicationController
   def create
     @account = Account.create(create_params)
-    # no any data validation now
-    render "show", status: 201
+
+    if @account.errors.blank?
+      render "show", status: 201
+    else
+      handle_active_record_validation_errors(errors: @account.errors)
+    end
   end
 
   def show

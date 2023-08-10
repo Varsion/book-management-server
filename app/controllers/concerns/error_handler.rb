@@ -20,4 +20,15 @@ module ErrorHandler
   def handle_404(err: nil, message: "Recourse Not Found", fields: nil)
     handel_error(status: 404, err: err, message: message, fields: fields)
   end
+
+  def handle_active_record_validation_errors(errors: nil, status: 422)
+    result = errors.map do |err|
+      {
+        field: err.attribute,
+        message:err.type
+      }
+    end
+    debugger
+    render json: result, status: status
+  end
 end

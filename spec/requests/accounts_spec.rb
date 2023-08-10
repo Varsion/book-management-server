@@ -15,6 +15,15 @@ RSpec.describe "Accounts", type: :request do
         frozen_amount: "0.0",
       })
     end
+
+    it "failed, with wrong amount" do
+      post "/accounts",
+           params: {
+             name: "jianhua",
+             amount: -100,
+           }.to_json, headers: basic_headers
+      expect(response.status).to eq(422)
+    end
   end
 
   describe "GET /accounts/:id" do
@@ -86,8 +95,8 @@ RSpec.describe "Accounts", type: :request do
         total_cost: (@book_2.price + @book_1.price).to_s,
         books_count: 2,
         transaction_count: 2,
-        transactions: [{id: @transaction_1.id}, {id: @transaction_3.id}],
-        books: [{id: @book_1.id}, {id: @book_2.id}],
+        transactions: [{ id: @transaction_1.id }, { id: @transaction_3.id }],
+        books: [{ id: @book_1.id }, { id: @book_2.id }],
       })
     end
   end
