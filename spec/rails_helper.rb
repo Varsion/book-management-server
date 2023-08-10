@@ -55,6 +55,37 @@ RSpec.configure do |config|
     end
   }
 
+  config.include Module.new {
+    def create_transaction(book, account)
+      account.update(
+        amount: account.amount - book.price,
+        frozen_amount: account.frozen_amount + book.price,
+      )
+      book.update(status: :borrowing)
+      create(:transaction, account: account, book: book)
+    end
+
+    def due_transaction(transaction)
+      # auto due after 1 day
+      Timecop.travel(Time.current + 1.days) do
+        transaction.account.update!(
+          frozen_amount: transaction.account.frozen_amount - transaction.cost,
+        )
+        transaction.book.update!(status: :idle)
+        transaction.update!(
+          status: :returned,
+          return_date: Time.current,
+        )
+      end
+    end
+
+    def build_transaction(book, account)
+      tran = create_transaction(book, account)
+      due_transaction(tran)
+      tran
+    end
+  }
+
   # RSpec Rails can automatically mix in different behaviours to your tests
   # based on their file location, for example enabling you to call `get` and
   # `post` in specs under `spec/controllers`.
