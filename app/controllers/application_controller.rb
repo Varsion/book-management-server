@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::API
   before_action :set_default_response_format
+  include ErrorHandler
 
   private
 
