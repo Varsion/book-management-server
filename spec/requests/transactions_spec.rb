@@ -15,6 +15,7 @@ RSpec.describe "Transactions", type: :request do
         params: {
           account_id: @account.id,
           book_id: @book_idle.id,
+          includes: ["Book", "Account"],
         }.to_json, headers: basic_headers
       expect(response.status).to eq(201)
       transaction = Transaction.find_by(id: JSON.parse(response.body)["id"])

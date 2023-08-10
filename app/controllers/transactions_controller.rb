@@ -1,4 +1,6 @@
 class TransactionsController < ApplicationController
+  before_action :set_includes
+
   def create
     # if pay by the day, need required expect_return_date
     account = Account.find(params[:account_id])
@@ -65,4 +67,8 @@ class TransactionsController < ApplicationController
   end
 
   private
+
+  def set_includes
+    @includes = Array.wrap(params[:includes]) || []
+  end
 end
