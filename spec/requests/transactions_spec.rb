@@ -93,6 +93,9 @@ RSpec.describe "Transactions", type: :request do
         id: @transaction.id,
         status: "returned",
       })
+      @account.reload
+      expect(@account.amount).to eq(0.99e3)
+      expect(@account.frozen_amount).to eq(0.0)
     end
   end
 end

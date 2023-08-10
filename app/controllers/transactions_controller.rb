@@ -20,12 +20,12 @@ class TransactionsController < ApplicationController
     end
 
     ActiveRecord::Base.transaction do
-      account.update(
+      account.update!(
         amount: account.amount - book.price,
         frozen_amount: account.frozen_amount + book.price,
       )
-      book.update(status: :borrowing)
-      @transaction = Transaction.create(
+      book.update!(status: :borrowing)
+      @transaction = Transaction.create!(
         account_id: account.id,
         book_id: book.id,
         cost: book.price,
@@ -52,11 +52,11 @@ class TransactionsController < ApplicationController
     end
 
     ActiveRecord::Base.transaction do
-      @transaction.account.update(
+      @transaction.account.update!(
         frozen_amount: @transaction.account.frozen_amount - @transaction.cost,
       )
-      @transaction.book.update(status: :idle)
-      @transaction.update(
+      @transaction.book.update!(status: :idle)
+      @transaction.update!(
         status: :returned,
         return_date: Time.current,
       )
