@@ -45,6 +45,7 @@ group :development, :test do
   gem "factory_bot"
   gem "faker"
   gem "timecop"
+  gem "simplecov"
 end
 
 group :development do
