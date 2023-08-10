@@ -179,6 +179,7 @@ GEM
       rspec-support (~> 3.12)
     rspec-support (3.12.1)
     thor (1.2.2)
+    timecop (0.9.6)
     timeout (0.4.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
@@ -203,6 +204,7 @@ DEPENDENCIES
   rails (~> 7.0.6)
   rspec-json_expectations
   rspec-rails (~> 6.0.0)
+  timecop
   tzinfo-data
 
 RUBY VERSION
