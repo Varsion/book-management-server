@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "articles#index"
 
+  root "index#index"
+
   resources :accounts, only: [:create, :show] do
     member do
       get :borrow_statistics
